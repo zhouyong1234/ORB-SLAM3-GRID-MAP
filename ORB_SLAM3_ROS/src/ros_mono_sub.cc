@@ -334,7 +334,7 @@ void updateGridMap(const geometry_msgs::PoseArray::ConstPtr& pts_and_pose){
 	processMapPts(pts_and_pose->poses, n_pts, 1, kf_pos_grid_x, kf_pos_grid_z);
 
 	getGridMap();
-	// showGridMap(pts_and_pose->header.seq);
+	showGridMap(pts_and_pose->header.seq);
 	//cout << endl << "Grid map saved!" << endl;
 }
 

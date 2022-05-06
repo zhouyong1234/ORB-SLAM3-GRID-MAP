@@ -535,16 +535,17 @@ void System::SaveKeyFrameTrajectoryTUM(const string &filename)
         vector<float> q = Converter::toQuaternion(R);
         cv::Mat t = pKF->GetCameraCenter();
 
-        // cout<<"---------------------"<<endl;
-        // cout<<"时间戳："<<pKF->mTimeStamp<<endl;
-        // cout<<"平移向量:"<<t.at<float>(0) << " " << t.at<float>(1) << " " << t.at<float>(2)<<endl;
-        // cout<<"四元数旋转(q0在前):"<< q[0] << " " << q[1] << " " << q[2] << " " << q[3] << endl;
-        //  cout<<"---------------------"<<endl;
-        // f << setprecision(6) << pKF->mTimeStamp << setprecision(7) << " " << t.at<float>(0) << " " << t.at<float>(1) << " " << t.at<float>(2)
-        //   << " " << q[0] << " " << q[1] << " " << q[2] << " " << q[3] << endl;
+        cout<<"---------------------"<<endl;
+        cout<<"时间戳："<<pKF->mTimeStamp<<endl;
+        cout<<"平移向量:"<<t.at<float>(0) << " " << t.at<float>(1) << " " << t.at<float>(2)<<endl;
+        cout<<"四元数旋转(q0在前):"<< q[0] << " " << q[1] << " " << q[2] << " " << q[3] << endl;
+         cout<<"---------------------"<<endl;
+        f << setprecision(6) << pKF->mTimeStamp << setprecision(7) << " " << t.at<float>(0) << " " << t.at<float>(1) << " " << t.at<float>(2)
+          << " " << q[0] << " " << q[1] << " " << q[2] << " " << q[3] << endl;
+
         //只保存平移
         //控制输出流显示浮点数的数字个数
-        f << setprecision(6) << pKF->mTimeStamp << setprecision(7) << " " << t.at<float>(0) << " " << t.at<float>(1) << " " << t.at<float>(2)<<endl;
+        // f << setprecision(6) << pKF->mTimeStamp << setprecision(7) << " " << t.at<float>(0) << " " << t.at<float>(1) << " " << t.at<float>(2)<<endl;
 
 
 

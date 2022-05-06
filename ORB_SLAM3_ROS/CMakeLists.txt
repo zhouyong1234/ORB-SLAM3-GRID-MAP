@@ -107,13 +107,13 @@ target_link_libraries(Monosub
 # )
 
 # Node for monocular-inertial camera
-# add_executable(Mono_Inertial
-#       src/ros_mono_inertial.cc
-# )
+add_executable(Mono_Inertial
+      src/ros_mono_inertial.cc
+)
 
-# target_link_libraries(Mono_Inertial
-#       ${LIBS}
-# )
+target_link_libraries(Mono_Inertial
+      ${LIBS}
+)
 
 # Node for stereo-inertial camera
 # add_executable(Stereo_Inertial

@@ -1,5 +1,38 @@
 # ORB-SLAM3
 
+## 运行单目+栅格地图
+```
+rosrun ORB_SLAM3_ROS Monopub /home/touchair/vio_ws/src/orb_slam3/Vocabulary/ORBvoc.txt /home/touchair/orb_ws/src/ORB-SLAM3-GRID-MAP/settings/mate30.yaml -1 /cv/ipcam/image_raw
+
+rosrun ORB_SLAM3_ROS Monosub 15 1 50 -50 50 -50 0.55 0.50 1 20 1 1 1 75 350
+```
+
+## 运行单目+IMU
+
+
+#### EuRoC
+
+```
+rosrun ORB_SLAM3_ROS Mono_Inertial /home/touchair/vio_ws/src/orb_slam3/Vocabulary/ORBvoc.txt /home/touchair/vio_ws/src/orb_slam3/Examples/Monocular-Inertial/EuRoC.yaml
+
+rosbag play MH_03_medium.bag
+```
+
+#### TUM-VI
+```
+rosrun ORB_SLAM3_ROS Mono_Inertial /home/touchair/vio_ws/src/orb_slam3/Vocabulary/ORBvoc.txt /home/touchair/gnss_ws/src/ORB_SLAM3_detailed_comments/Examples/Monocular-Inertial/TUM_512.yaml
+
+rosbag play dataset-slides1_512_16.bag
+```
+
+#### RESULTS
+EuRoC
+
+![](results/euroc.png)
+TUM-VI
+![](results/tum-vi.png)
+
+
 ### V1.0, December 22th, 2021
 **Authors:** Carlos Campos, Richard Elvira, Juan J. Gómez Rodríguez, [José M. M. Montiel](http://webdiis.unizar.es/~josemari/), [Juan D. Tardos](http://webdiis.unizar.es/~jdtardos/).
 

@@ -21,7 +21,7 @@
 #include <std_msgs/Header.h>
 #include <sensor_msgs/Imu.h> 
 
-#include"../../../include/System.h"
+#include "../ORB_SLAM3_LIB/include/System.h"
 
 using namespace std;
 
@@ -31,6 +31,12 @@ std::mutex m_buf;
 cv::Mat M1l,M2l,M1r,M2r;
 double pretime=0;
 ORB_SLAM3::System* mpSLAM;
+
+std::string img_topic;
+std::string imu_topic;
+
+
+cv::Ptr<cv::CLAHE> mClahe = cv::createCLAHE(3.0, cv::Size(8, 8));
 
 
 void img0_callback(const sensor_msgs::ImageConstPtr &img_msg)
@@ -48,16 +54,23 @@ cv::Mat getImageFromMsg(const sensor_msgs::ImageConstPtr &img_msg)
     cv_bridge::CvImageConstPtr cv_ptr;
     try
     {
-        cv_ptr = cv_bridge::toCvShare(img_msg);
+        // cv_ptr = cv_bridge::toCvShare(img_msg);
+        cv_ptr = cv_bridge::toCvShare(img_msg, sensor_msgs::image_encodings::MONO8);
     }
     catch (cv_bridge::Exception& e)
     {
         ROS_ERROR("cv_bridge exception: %s", e.what());
     }
 
-
-    cv::Mat img = cv_ptr->image.clone();
-    return img;
+    if(cv_ptr->image.type()==0)
+    {
+        return cv_ptr->image.clone();
+    }
+    else
+    {
+        std::cout << "Error type" << std::endl;
+        return cv_ptr->image.clone();
+    }
 }
 
 void imu_callback(const sensor_msgs::ImuConstPtr &imu_msg)
@@ -107,6 +120,7 @@ void sync_process()
             // printf("%f \n\n",time);
             pretime = time;
             
+            mClahe->apply(im,im);
             mpSLAM->TrackMonocular(im,time,vImuMeas); 
             // m_buf.unlock();
         }
@@ -138,14 +152,35 @@ int main(int argc, char **argv)
     ROS_WARN("waiting for image and imu...");
 
 
+    // std::cout << argv[0] << "\n" << argv[1] << "\n" << argv[2] << std::endl;
+    cv::FileStorage yaml_file(argv[2], cv::FileStorage::READ);
+    if(!yaml_file.isOpened())
+    {
+        std::cerr << "ERROR: Wrong path to settings" << std::endl;
+    }
 
-    ros::Subscriber sub_imu = n.subscribe("/handsfree/imu", 2000, imu_callback, ros::TransportHints().tcpNoDelay());
-    ros::Subscriber sub_img0 = n.subscribe("/usb_cam/image_raw", 100, img0_callback);
+    yaml_file["imu_topic"] >> imu_topic;
+    yaml_file["img_topic"] >> img_topic;
+
+    std::cout << "imu topic: " << imu_topic << std::endl;
+    std::cout << "img topic: " << img_topic << std::endl;
+
+
+    ros::Subscriber sub_imu = n.subscribe(imu_topic, 2000, imu_callback, ros::TransportHints().tcpNoDelay());
+    ros::Subscriber sub_img0 = n.subscribe(img_topic, 100, img0_callback);
 
 
     std::thread sync_thread{sync_process};
    
     ros::spin();
+
+    // Stop all threads
+    SLAM.Shutdown();
+
+    // Save camera trajectory
+    SLAM.SaveKeyFrameTrajectoryTUM("KeyFrameTrajectory.txt");
+
+    ros::shutdown();
 
     return 0;
 }

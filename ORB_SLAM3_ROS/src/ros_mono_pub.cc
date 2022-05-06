@@ -79,8 +79,8 @@ int main(int argc, char **argv){
 		// ImageGrabber igb(SLAM, pub_pts_and_pose, pub_all_kf_and_pts);
 		// ros::Subscriber sub = nodeHandler.subscribe(image_topic, 1, &ImageGrabber::GrabImage, &igb);
 		// ros::spin();
-		// cv::VideoCapture cam("/home/touchair/VID_20220225_151648.mp4");
-		cv::VideoCapture cam("/home/touchair/VID_20220216_160030.mp4");
+		// cv::VideoCapture cam("/home/touchair/mmexport1650362734267.mp4");
+		cv::VideoCapture cam("/home/touchair/test/ground_640x480.mp4");
 		cv::Mat im;
 		int tframe = 0;
 		if(!cam.isOpened())
